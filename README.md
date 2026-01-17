@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/smtphotel-logo.png" alt="smtphotel logo" width="200">
+</p>
+
 # smtphotel
 
 SMTP Hotel.  Your mail checks in, but it doesn't check out!
@@ -6,6 +10,8 @@ A lightweight development SMTP server that captures all incoming
 email. Perfect for testing email functionality in development environments
 without sending real emails.  Provides a web interface and REST API for
 viewing/managing messages, perfect for integrating into testing.
+
+![smtphotel web interface](.github/assets/smtphotel.png)
 
 ## Features
 
