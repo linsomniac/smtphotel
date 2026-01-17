@@ -1,0 +1,61 @@
+# AIDEV-NOTE: Docker Compose configuration for smtphotel
+# Usage: docker compose up -d
+#
+# WARNING: This server captures ALL email.
+# Use only in development/testing environments.
+# Never expose to the public internet.
+
+services:
+  smtphotel:
+    build: .
+    container_name: smtphotel
+    ports:
+      # SMTP port - applications send email here
+      - "2525:2525"
+      # HTTP port - Web UI and REST API
+      - "8025:8025"
+    volumes:
+      # Persist captured messages across container restarts
+      - smtphotel_data:/data
+    environment:
+      # Network binding (0.0.0.0 to allow external connections)
+      - BIND_ADDRESS=0.0.0.0
+
+      # Server ports (must match exposed ports)
+      - SMTP_PORT=2525
+      - HTTP_PORT=8025
+
+      # Database path (inside the container)
+      - DB_PATH=/data/smtphotel.db
+
+      # Message retention (0 = disabled)
+      # Uncomment to enable automatic pruning:
+      # - MAX_MESSAGE_AGE_HOURS=24
+      # - MAX_MESSAGE_COUNT=1000
+      # - MAX_STORAGE_MB=100
+
+      # Pruning interval (5 minutes default)
+      - PRUNE_INTERVAL_SECONDS=300
+
+      # Message limits
+      - MAX_MESSAGE_SIZE_MB=25
+
+      # SMTP abuse controls
+      - MAX_CONNECTIONS=100
+      - SMTP_TIMEOUT_SECONDS=60
+      # - RATE_LIMIT_PER_MINUTE=60
+
+      # CORS (empty = same-origin only, recommended for security)
+      # For separate frontend dev server, set: CORS_ORIGINS=http://localhost:3000
+      - CORS_ORIGINS=
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8025/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  smtphotel_data:
+    driver: local

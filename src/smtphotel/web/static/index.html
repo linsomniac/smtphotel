@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>smtphotel - Development Mail Server</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <h1>smtphotel</h1>
+                <span class="header-subtitle">Development Mail Server</span>
+            </div>
+            <div class="header-actions">
+                <label class="auto-refresh">
+                    <input type="checkbox" id="autoRefresh" checked>
+                    <span>Auto-refresh</span>
+                </label>
+                <button class="btn btn-secondary" id="refreshBtn" title="Refresh (R)">
+                    Refresh
+                </button>
+                <button class="btn btn-danger" id="deleteAllBtn" title="Delete All">
+                    Delete All
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats bar -->
+        <div class="stats-bar">
+            <span id="messageCount">0 messages</span>
+            <span id="storageSize">0 B</span>
+        </div>
+
+        <!-- Main content -->
+        <main class="main">
+            <!-- Message list -->
+            <div class="message-list" id="messageList">
+                <div class="empty-state" id="emptyState">
+                    <p>No messages yet</p>
+                    <p class="empty-hint">Send an email to <strong>any address</strong> on port <strong>2525</strong></p>
+                </div>
+                <table class="message-table" id="messageTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th class="col-time sortable" data-sort="received_at">Time</th>
+                            <th class="col-from sortable" data-sort="mail_from">From</th>
+                            <th class="col-to">To</th>
+                            <th class="col-subject sortable" data-sort="subject">Subject</th>
+                            <th class="col-size sortable" data-sort="size_bytes">Size</th>
+                            <th class="col-actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="messageTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Message detail panel -->
+            <div class="message-detail" id="messageDetail" style="display: none;">
+                <div class="detail-header">
+                    <button class="btn btn-secondary" id="closeDetailBtn">&larr; Back</button>
+                    <div class="detail-actions">
+                        <button class="btn btn-secondary" id="viewRawBtn">View Raw</button>
+                        <button class="btn btn-danger" id="deleteBtn">Delete</button>
+                    </div>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">From:</span>
+                            <span class="meta-value" id="detailFrom"></span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">To:</span>
+                            <span class="meta-value" id="detailTo"></span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Subject:</span>
+                            <span class="meta-value" id="detailSubject"></span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Received:</span>
+                            <span class="meta-value" id="detailTime"></span>
+                        </div>
+                    </div>
+
+                    <!-- Headers toggle -->
+                    <details class="headers-section">
+                        <summary>Headers</summary>
+                        <pre id="detailHeaders" class="headers-content"></pre>
+                    </details>
+
+                    <!-- Body tabs -->
+                    <div class="body-tabs">
+                        <button class="tab-btn active" data-tab="text">Text</button>
+                        <button class="tab-btn" data-tab="html">HTML</button>
+                    </div>
+                    <div class="body-content">
+                        <div class="tab-panel active" id="textPanel">
+                            <pre id="detailBodyText" class="body-text"></pre>
+                        </div>
+                        <div class="tab-panel" id="htmlPanel">
+                            <!-- Sandboxed iframe for HTML content -->
+                            <!-- AIDEV-NOTE: Strict sandbox - no scripts, no same-origin, no popups -->
+                            <iframe
+                                id="htmlFrame"
+                                sandbox=""
+                                class="html-frame"
+                            ></iframe>
+                        </div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="attachments-section" id="attachmentsSection" style="display: none;">
+                        <h3>Attachments</h3>
+                        <ul class="attachment-list" id="attachmentList"></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Toast container -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

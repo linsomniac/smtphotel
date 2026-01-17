@@ -1,0 +1,11 @@
+smtphotel is a docker container that implements a simple mail server for
+development use.  It includes an SMTP server that never forwards e-mail or sends
+bounces/double bounces (all mail rejection must be done at SMTP time).  It
+implements a simple, robust web interface that uses the REST API as the backend,
+the web interface should be simple but a joy to use and have reasonable
+ability to show the e-mail bodies and headers.  The REST API should allow access
+to the underlying mail storage so that tests and the like can access messages to
+determine the results of test mail sends.  The mail server should accept e-mail
+addressed to any address and store it in the mail store.  Mail should be stored
+in a sqlite message store.  Configuration options for pruning the message store
+should include deleting messages by age and by message count.
